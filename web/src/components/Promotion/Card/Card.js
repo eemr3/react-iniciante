@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './Card.css';
 
 const PromotionCard = ({ promotion }) => (
-  <div className="promotion-card">
+  <div className="promotion-card" >
     <img
       src={promotion.imageUrl}
       alt={promotion.title}

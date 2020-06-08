@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+
+import useApi from 'components/Utils/useApi';
+
 import './Form.css';
 
 const initialVelue = {
@@ -14,16 +16,30 @@ const PromotionForm = ({ id }) => {
 
     const [values, setValues] = useState(id ? null : initialVelue);
     const history = useHistory();
+    const [load] = useApi({
+        method: 'get',
+        url: `/promotions/${id}`,
+        onCompleted: (response) => {
+            setValues(response.data);
+        }
+    })
+
+    const [save, saveInfo] = useApi({
+        url: id ? `/promotions/${id}` : '/promotions',
+        method: id ? 'put' : 'post',
+        data: values,
+        onCompleted: (response) =>{
+            if (!response.error) {
+                history.push('/')
+            }  
+        }
+    })
 
     useEffect(() =>{
         if(id) {
-            axios.get(`http://localhost:5000/promotions/${id}`)
-            .then((response) => {
-                
-                setValues(response.data);
-            })
+            load();
         }
-    }, []);
+    }, [id]);
 
     function onChange(ev) {
         const { name, value } = ev.target;
@@ -34,16 +50,7 @@ const PromotionForm = ({ id }) => {
     
     function onSubmit(ev){
         ev.preventDefault();
-
-        const method = id ? 'put' : 'post';
-        const url = id 
-        ? `http://localhost:5000/promotions/${id}`
-        : 'http://localhost:5000/promotions'
-
-        axios[method](url, values)
-        .then((response) => {
-            history.push('/');
-        });
+        save();
     }
 
     return (
@@ -58,6 +65,7 @@ const PromotionForm = ({ id }) => {
               )
             :(
                 <form onSubmit={onSubmit}>
+                    {saveInfo.loading && <span>Salvando dados</span>}
                     <div className="promotion-form__grup">
                         <label htmlFor="title">Titulo</label>
                         <input id="title" name="title" type="text" onChange={onChange} value={values.title} />
