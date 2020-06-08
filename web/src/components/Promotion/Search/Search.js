@@ -32,7 +32,7 @@ const PromotionSearch = () => {
         value={search}
         onChange={(ev) => setSearch(ev.target.value)}
       />
-      <PromotionList promotions={promotions} loading={!promotions.length}/>
+      <PromotionList promotions={promotions} loading={!promotions.length} />
     </div>
   );
 };
