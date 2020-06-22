@@ -5,11 +5,13 @@ import useApi from 'components/Utils/useApi';
 import PromotionList from 'components/Promotion/List/List';
 
 import './Search.css';
+import { useRef } from 'react';
 
 const PromotionSearch = () => {
-  
+  const mountRef = useRef(null);
   const [search, setSearch] = useState('');
   const [load, loadInfo] = useApi({
+    debounceDelay: 300,
     method: 'get',
     url: '/promotions',
     params: {
@@ -22,7 +24,14 @@ const PromotionSearch = () => {
   });
 
   useEffect(() => {
-    load();
+    load({
+      debounced: mountRef.current,
+    });
+
+    if (!mountRef.current) {
+      mountRef.current = true;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   return (
