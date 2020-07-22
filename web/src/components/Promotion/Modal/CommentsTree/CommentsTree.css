@@ -1,0 +1,24 @@
+.prmotion-modal-comments-tree {
+  list-style: none;
+  font-size: 14px;
+  padding-left: 0;
+}
+
+.prmotion-modal-comments-tree__item {
+  display: flex;
+}
+
+.prmotion-modal-comments-tree__item__avatar{
+  width: 49px;
+  height: 49px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.prmotion-modal-comments-tree__item__info p {
+  margin-top: 5px;
+}
+
+.prmotion-modal-comments-tree__item__name {
+  font-weight: bold;
+}
