@@ -23,7 +23,7 @@ const PromotionModal = ({ promotionId, onclickClose }) => {
   })
 
   useEffect(() => {
-    load()
+    load({ quietly: true })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -38,8 +38,20 @@ const PromotionModal = ({ promotionId, onclickClose }) => {
         },
       })
       setComment('')
-      load()
+      load({ quietly: true })
     } catch (error) {}
+  }
+
+  async function sendAnswer(text, parentId) {
+    await sendComment({
+      data: {
+        userId: 1,
+        promotionId,
+        comment: text,
+        parentId,
+      },
+    })
+    load()
   }
 
   return (
@@ -49,12 +61,16 @@ const PromotionModal = ({ promotionId, onclickClose }) => {
           placeholder="Comentar..."
           onChange={(ev) => setComment(ev.target.value)}
           value={comment}
+          disabled={sendCommentInfo.loading}
         />
         <button type="submit" disabled={sendCommentInfo.loading}>
           {sendCommentInfo.loading ? 'Enviando' : 'Enviar'}
         </button>
       </form>
-      <PromotionModalCommentsTree comments={loadInfo.data} />
+      <PromotionModalCommentsTree
+        comments={loadInfo.data}
+        sendComment={sendAnswer}
+      />
     </UIModal>
   )
 }

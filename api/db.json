@@ -84,6 +84,47 @@
       "promotionId": 2,
       "comment": "Testeando de novo",
       "id": 8
+    },
+    {
+      "userId": 1,
+      "promotionId": 5,
+      "comment": "teste",
+      "parentId": 3,
+      "id": 9
+    },
+    {
+      "userId": 1,
+      "promotionId": 5,
+      "comment": "teste do teste",
+      "parentId": 9,
+      "id": 10
+    },
+    {
+      "userId": 1,
+      "promotionId": 5,
+      "comment": "teste dese aqui",
+      "parentId": 4,
+      "id": 11
+    },
+    {
+      "userId": 1,
+      "promotionId": 4,
+      "comment": "Novo comentário",
+      "id": 12
+    },
+    {
+      "userId": 1,
+      "promotionId": 4,
+      "comment": "Teste desee",
+      "parentId": 6,
+      "id": 13
+    },
+    {
+      "userId": 1,
+      "promotionId": 4,
+      "comment": "Novo teste",
+      "parentId": 12,
+      "id": 14
     }
   ],
   "users": [
