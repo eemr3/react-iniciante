@@ -1,41 +1,63 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 
-import useApi from 'components/Utils/useApi';
-import PromotionList from 'components/Promotion/List/List';
+import UIInfiniteScroll from 'components/UI/InfiniteScroll/InfiniteScroll'
+import useApi from 'components/Utils/useApi'
+import PromotionList from '../List/List'
+import './Search.css'
 
-import './Search.css';
-import { useRef } from 'react';
+const baseParams = {
+  _embed: 'comments',
+  _order: 'desc',
+  _sort: 'id',
+  _limit: 2,
+}
 
 const PromotionSearch = () => {
-  const mountRef = useRef(null);
-  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1)
+  const mountRef = useRef(null)
+  const [search, setSearch] = useState('')
   const [load, loadInfo] = useApi({
     debounceDelay: 300,
-    method: 'get',
     url: '/promotions',
-    params: {
-      _embed: 'comments',
-      _order: 'desc',
-      _sort: 'id',
-      title_like: search || undefined,
-    },
-    
-  });
+    method: 'get',
+  })
 
   useEffect(() => {
     load({
       debounced: mountRef.current,
-    });
+      params: {
+        ...baseParams,
+        _page: 1,
+        title_like: search || undefined,
+      },
+    })
 
     if (!mountRef.current) {
-      mountRef.current = true;
+      mountRef.current = true
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
+  }, [search])
+
+  function fetchMore() {
+    const newPage = page + 1
+    load({
+      isFetchMore: true,
+      params: {
+        ...baseParams,
+        _page: newPage,
+        title_like: search || undefined,
+      },
+      updateRequestInfo: (newRequestInfo, prevRequestInfo) => ({
+        ...newRequestInfo,
+        data: [...prevRequestInfo.data, ...newRequestInfo.data],
+      }),
+    })
+    setPage(newPage)
+  }
 
   return (
-    <div className="promotion-search" >
+    <div className="promotion-search">
       <header className="promotion-search__header">
         <h1>Promo Show</h1>
         <Link to="/create">Nova Promoção</Link>
@@ -47,13 +69,18 @@ const PromotionSearch = () => {
         value={search}
         onChange={(ev) => setSearch(ev.target.value)}
       />
-      <PromotionList 
-        promotions={loadInfo.data} 
-        loading={loadInfo.loading} 
+      <PromotionList
+        promotions={loadInfo.data}
+        loading={loadInfo.loading}
         error={loadInfo.error}
       />
+      {loadInfo.data &&
+        !loadInfo.loading &&
+        loadInfo.data?.length < loadInfo.total && (
+          <UIInfiniteScroll fetchMore={fetchMore} />
+        )}
     </div>
-  );
-};
+  )
+}
 
-export default PromotionSearch;
+export default PromotionSearch

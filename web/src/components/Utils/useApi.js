@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import axios from 'axios'
-
 import useDebouncedPromise from 'components/Utils/useDebouncedPromise'
 
 const initialRequestInfo = {
@@ -16,32 +15,54 @@ export default function useApi(config) {
   async function call(localConfig) {
     let response = null
 
-    const finalCongig = {
+    const finalConfig = {
       baseURL: 'http://localhost:5000',
+      updateRequestInfo: (newInfo) => newInfo,
       ...config,
       ...localConfig,
     }
 
-    if (!finalCongig.quietly) {
+    if (finalConfig.isFetchMore) {
+      setRequestInfo({
+        ...initialRequestInfo,
+        data: requestInfo.data,
+        loading: true,
+      })
+    } else if (!finalConfig.quietly) {
       setRequestInfo({
         ...initialRequestInfo,
         loading: true,
       })
     }
 
-    const fn = finalCongig.debounced ? debouncedAxios : axios
-    try {
-      response = await fn(finalCongig)
+    const fn = finalConfig.debounced ? debouncedAxios : axios
 
-      setRequestInfo({
+    try {
+      response = await fn(finalConfig)
+      console.log(response.headers)
+      const newRequestInfo = {
         ...initialRequestInfo,
         data: response.data,
-      })
+      }
+
+      if (response.headers['x-total-count'] !== undefined) {
+        newRequestInfo.total = Number.parseInt(
+          response.headers['x-total-count'],
+          10
+        )
+      }
+
+      setRequestInfo(finalConfig.updateRequestInfo(newRequestInfo, requestInfo))
     } catch (error) {
-      setRequestInfo({
-        ...initialRequestInfo,
-        error,
-      })
+      setRequestInfo(
+        finalConfig.updateRequestInfo(
+          {
+            ...initialRequestInfo,
+            error,
+          },
+          requestInfo
+        )
+      )
     }
 
     if (config.onCompleted) {
