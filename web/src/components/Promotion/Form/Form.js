@@ -48,8 +48,8 @@ const PromotionForm = ({ id }) => {
   const values = id ? lodinfo.data : initialVelue
 
   return (
-    <div>
-      <h1>Promo Show</h1>
+    <div className="container">
+      <h1>PROMO SHOW</h1>
       <h2>Nova Promoção</h2>
 
       {!values ? (
@@ -62,20 +62,22 @@ const PromotionForm = ({ id }) => {
           render={() => (
             <Form>
               {saveInfo.loading && <span>Salvando dados</span>}
-              <div className="promotion-form__grup">
-                <Field name="title" type="text" label="Tótilo" />
+              <div className="promotion-form__group">
+                <Field name="title" type="text" label="Título" />
               </div>
-              <div className="promotion-form__grup">
+              <div className="promotion-form__group">
                 <Field name="url" type="text" label="Link" />
               </div>
-              <div className="promotion-form__grup">
+              <div className="promotion-form__group">
                 <Field name="imageUrl" type="text" label="Imagem (URL)" />
               </div>
-              <div className="promotion-form__grup">
+              <div className="promotion-form__group">
                 <Field name="price" type="number" label="Preço" />
               </div>
               <div>
-                <button type="submit">Salvar</button>
+                <button className="save_btn" type="submit">
+                  Salvar
+                </button>
               </div>
             </Form>
           )}
