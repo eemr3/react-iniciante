@@ -60,7 +60,9 @@ const PromotionSearch = () => {
     <div className="promotion-search">
       <header className="promotion-search__header">
         <h1>Promo Show</h1>
-        <Link to="/create">Nova Promoção</Link>
+        <Link className="new_promotion" to="/create">
+          Nova Promoção
+        </Link>
       </header>
       <input
         type="search"

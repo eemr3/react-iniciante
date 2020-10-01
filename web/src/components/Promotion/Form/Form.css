@@ -1,5 +1,36 @@
-.promotion-form__grup {
+.promotion-form__group {
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
+}
+
+.promotion-form__group:first-child {
+  outline: #3498db;
+}
+
+.container h1 {
+  margin-top: 50px;
+  color: rgb(37, 37, 37);
+}
+
+.container h2 {
+  color: rgba(52, 152, 219, 0.7);
+  font-size: 20px;
+}
+
+.save_btn {
+  border: 1px solid #3498db;
+  background: transparent;
+  color: #3498db;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 10px;
+  transition: 0.3s;
+  width: 100px;
+  outline: none;
+}
+
+.save_btn:hover {
+  background: #3498db;
+  color: white;
 }
