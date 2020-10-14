@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import UIInfiniteScroll from 'components/UI/InfiniteScroll/InfiniteScroll'
 import useApi from 'components/Utils/useApi'
 import PromotionList from '../List/List'
+import UIButton from 'components/UI/Button/Button'
 import './Search.css'
 
 const baseParams = {
@@ -60,7 +61,9 @@ const PromotionSearch = () => {
     <div className="promotion-search">
       <header className="promotion-search__header">
         <h1>Promo Show</h1>
-        <Link to="/create">Nova Promoção</Link>
+        <UIButton componet={Link} to="/create" theme="contained-green">
+          Nova Promoção
+        </UIButton>
       </header>
       <input
         type="search"
