@@ -1,16 +1,21 @@
 import React, { useState } from 'react'
+
+import useApi from 'components/Utils/useApi'
 import PromotionModal from '../Modal/Modal'
 import PromotionCard from '../Card/Card'
 
 import './List.css'
 
-const PromotionList = ({ loading, error, promotions }) => {
+const PromotionList = ({ loading, error, promotions, refetch }) => {
   const [promotionId, setPromotionId] = useState(null)
+  const [deletePromotion, deletePromotionInfo] = useApi({
+    method: 'DELETE',
+  })
 
   if (error) {
     return <div>Algo de errado não está certo</div>
   }
-  if (promotions === null) {
+  if (promotions === null || deletePromotionInfo.loading) {
     return <div>Carregando...</div>
   }
 
@@ -25,6 +30,12 @@ const PromotionList = ({ loading, error, promotions }) => {
           key={promotion.id}
           promotion={promotion}
           onClickComments={() => setPromotionId(promotion.id)}
+          onclickDelete={async () => {
+            await deletePromotion({
+              url: `/promotions/${promotion.id}`,
+            })
+            refetch()
+          }}
         />
       ))}
       {loading && <div>Carregando mais promoções...</div>}
